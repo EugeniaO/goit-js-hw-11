@@ -59,8 +59,8 @@ const handleSubmit = async (event) => {
 
     const searchQuery = refs.inputEl.value;
 
-    if (!searchQuery) { 
-        Notify.warning("Enter some serch query.");
+    if (!searchQuery || !searchQuery.trim()) { 
+        Notify.warning("Enter some search query.");
         return;
     }
 
@@ -69,14 +69,24 @@ const handleSubmit = async (event) => {
     const imagesListMurkup = hits.map((photo) => cardTemplate(photo)).join('');
     refs.galleryEl.insertAdjacentHTML("beforeend", imagesListMurkup);
 
-    lightbox = new SimpleLightbox('.gallery a');
+    lightbox = new SimpleLightbox('.gallery a', { captionDelay: '250', captionsData: 'alt' });
 
     if (hits.length) {
-        refs.loadMoreButton.classList.add('show');
+        // refs.loadMoreButton.classList.add('show');
         Notify.info(`Hooray! We found ${totalHits} images.`);
-    } else { 
+
+        if (totalHits > 40) {
+        refs.loadMoreButton.classList.add('show');
+
+        }
+        
+    }
+    else { 
         Notify.info("Sorry, there are no images matching your search query. Please try again.");
     }
+
+    
+
 };
 
 const handleClick = async () => { 
